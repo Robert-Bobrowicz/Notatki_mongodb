@@ -1,4 +1,4 @@
 # Notatki_mongodb 
 
-Projekt łączący beckend z frontendem. 
+Projekt łączący backend z frontendem. 
 Korzystam z express, mongodb i React.
