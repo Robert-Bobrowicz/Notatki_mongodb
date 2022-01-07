@@ -6,8 +6,11 @@ const app = express();
 const {port} = require("./config");
 const {router} = require('./routes/api');
 
+const bodyParser = require('body-parser');
+
 require('./db/mongoose');
 
+app.use(bodyParser.json());
 app.use('/', router);
 
 app.listen(port, () => {
