@@ -2,13 +2,12 @@ console.log("Project running... ");
 
 const express = require('express');
 const app = express();
-
+const bodyParser = require('body-parser');
 const {port} = require("./config");
 const {router} = require('./routes/api');
 
-const bodyParser = require('body-parser');
-
 require('./db/mongoose');
+
 
 app.use(bodyParser.json());
 app.use('/', router);
