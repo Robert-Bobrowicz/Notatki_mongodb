@@ -33,9 +33,14 @@ const Note = require('../db/models');
             title: title,
             body: body
         });
+        try {
+            await note.save().then(() => console.log(' ...new note has been saved to db.'));
+            res.status(200).json(note);
+        } catch(err) {
+            console.log(err);
+            return res.status(422).json({message: err.message});
+        }
 
-        await note.save().then(() => console.log('New note has been saved to db.'));
-        res.status(200).json(note);
     }
 
     async function updateNote(req, res) {
@@ -48,7 +53,8 @@ const Note = require('../db/models');
             note.title = title;
             note.body = body;
 
-            await note.save().then(() => console.log(' ...note updated'));
+            await note.save();
+            console.log(' ...note updated')
             res.status(201).json(note);
         } catch(err) {
             res.send(err)
