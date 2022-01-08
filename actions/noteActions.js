@@ -1,38 +1,64 @@
 const Note = require('../db/models');
-const {port} = require("../config");
 
-    function getAllNotes (req, res) {
-        // pobieranie notatek z db
+    async function getAllNotes (req, res) {
 
-        //wyświetlanie pobranych notatek
-        res.status(200).send('API działa');
+        try {
+            // pobieranie notatek z db
+            const data = await Note.find({})
+            console.log(' ...all documents has been read from db');
+            //wyświetlanie pobranych notatek
+            res.status(200).json(data);
+        } catch(err) {
+            console.log(err);
+            res.status(500).json({message: err.message});
+        }
     }
 
-    function getNote(req, res) {
-        res.status(202).send('Info o notatce')
+    async function getNote(req, res) {
+        try{
+            const id = req.params.id;
+            const note = await Note.findOne({_id: id});
+            console.log(' ...note read');
+            res.status(200).json(note);
+        } catch(err) {
+            console.log(err);
+            res.status(500).json({message: err.message});
+        }
     }
 
-    function saveNote(req, res) {
-        // const newNote = new Note({
-        //     title: 'zarobić zakupy jedzeniowe3',
-        //     body: 'schabowe, wątróbka, kiełbasa sucha'
-        // });
-        // newNote.save().then(() => console.log('New note has been saved to db.'));
-
+    async function saveNote(req, res) {
         const title = req.body.title;
         const body = req.body.body;
+        const note = new Note({
+            title: title,
+            body: body
+        });
 
-        res.send(`Notatka została zapisana w db: Tytuł: ${title}, treść: ${body}, serwer działa na porcie ${port}`)
+        await note.save().then(() => console.log('New note has been saved to db.'));
+        res.status(200).json(note);
     }
 
-    function updateNote(req, res) {
-        const id = req.params.id;
-        res.send('Note updated, ID: ' + id);
+    async function updateNote(req, res) {
+        try {
+            const id = req.params.id;
+            const title = req.body.title;
+            const body = req.body.body;
+            const note = await Note.findOne({_id: id});
+
+            note.title = title;
+            note.body = body;
+
+            await note.save().then(() => console.log(' ...note updated'));
+            res.status(201).json(note);
+        } catch(err) {
+            res.send(err)
+        }
     }
 
-    function deleteNote(req, res) {
+    async function deleteNote(req, res) {
         const id = req.params.id;
-        res.send('Note deleted, ID: ' + id);
+        await Note.deleteOne({_id: id}).then(() => console.log(` ...note ID: ${id} is deleted`));
+        res.sendStatus(204);
     }
 
 
