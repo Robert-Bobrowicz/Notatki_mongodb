@@ -45,20 +45,27 @@ class Notes extends React.Component {
                 .catch(err => {console.log(err)});
     }
 
-    deleteNote(id) {
+    async deleteNote(id) {
         console.log('usuwanie notatki', id);
         let notes = [...this.state.notes];
         notes = notes.filter(note => note._id !== id);
+        await axios.delete('http://localhost:3001/notes/' + id);
         this.setState({notes: notes});
     }
 
-    addNote(note) {
+    async addNote(note) {
         const notes = [...this.state.notes];
-        notes.push(note);
+        //add to backend
+        const res = await axios.post('http://localhost:3001/notes', note);
+        //add to frontend
+        const newNote = res.data;
+        notes.push(newNote);
         this.setState({notes: notes});
     }
 
-    editNote(note) {
+    async editNote(note) {
+        await axios.put('http://localhost:3001/notes/' + note._id, note);
+
         const notes = [...this.state.notes];
         const index = notes.findIndex(el => el.id === note._id);
         if (index >=0) {
@@ -87,6 +94,7 @@ class Notes extends React.Component {
                     <Modal
                         isOpen = {this.state.showEditModal}
                         contentLabel = "Edycja notatki"
+                        ariaHideApp = {false}
                     >
                         {/*//formularz edycji EditNote.js*/}
                         <EditNote
@@ -98,11 +106,12 @@ class Notes extends React.Component {
                         <button onClick={() => this.toggleModal()}>anuluj</button>
                     </Modal>
                     {this.state.notes.map(note => (
+
                         <Note
                             key = {note._id}
                             title = {note.title}
                             body = {note.body}
-                            id = {note._id}
+                            _id = {note._id}
                             onEdit = {(note) => this.editNoteHandler(note)}
                             onDelete = {(id) => this.deleteNote(id)}
                         />
