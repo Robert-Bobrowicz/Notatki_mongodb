@@ -2,9 +2,8 @@ import React, {useState} from "react";
 
 
 function EditNote(props) {
-    const [showForm, setShowForm] = useState(false);
-    const [title, setTitle] = useState('');
-    const [desc, setDesc] = useState('');
+    const [title, setTitle] = useState(props.title);
+    const [desc, setDesc] = useState(props.body);
 
     const changeTitleHandler = (event) => {
         const value = event.target.value;
@@ -17,7 +16,12 @@ function EditNote(props) {
     }
 
     const editNote = () => {
-
+        const note = {
+            title: title,
+            body: desc,
+            id: props.id
+        }
+        props.onEdit(note);
     }
 
     return (
@@ -35,8 +39,7 @@ function EditNote(props) {
                 onChange = {changeDescHandler}
             />
             <br />
-            <button onClick={() => console.log(' ...save note')}>zapisz</button>
-            <button className="delete" onClick={() => setShowForm(false)}>ukryj formularz</button>
+            <button onClick={editNote}>zapisz</button>
         </div>
     );
 }
