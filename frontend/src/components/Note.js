@@ -12,7 +12,7 @@ function Note(props) {
         <div className="note">
             <p onClick = {toggleDesc}>{props.title}</p>
             {showDesc && (<div className="description">{props.body}</div>)}
-            <button onClick={() => props.onEdit({title: props.title, body: props.body, id: props.id})}>edytuj</button>
+            <button onClick={() => props.onEdit({title: props.title, body: props.body, _id: props._id})}>edytuj</button>
             <button className="delete" onClick={() => props.onDelete(props.id)}>usuń</button>
         </div>
     )
