@@ -54,7 +54,7 @@ const Note = require('../db/models');
             note.body = body;
 
             await note.save();
-            console.log(' ...note updated')
+            console.log(` ...note updated ID: ${id}`)
             res.status(201).json(note);
         } catch(err) {
             res.send(err)
@@ -63,7 +63,7 @@ const Note = require('../db/models');
 
     async function deleteNote(req, res) {
         const id = req.params.id;
-        await Note.deleteOne({_id: id}).then(() => console.log(` ...note ID: ${id} is deleted`));
+        await Note.deleteOne({_id: id}).then(() => console.log(` ...note is deleted ID: ${id}`));
         res.sendStatus(204);
     }
 
