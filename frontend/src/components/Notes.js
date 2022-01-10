@@ -46,7 +46,7 @@ class Notes extends React.Component {
     }
 
     async deleteNote(id) {
-        console.log('usuwanie notatki', id);
+        console.log('usunięto notatkę ID: ' + id, id);
         let notes = [...this.state.notes];
         notes = notes.filter(note => note._id !== id);
         await axios.delete('http://localhost:3001/notes/' + id);
@@ -64,13 +64,15 @@ class Notes extends React.Component {
     }
 
     async editNote(note) {
+
         await axios.put('http://localhost:3001/notes/' + note._id, note);
 
         const notes = [...this.state.notes];
         const index = notes.findIndex(el => el.id === note._id);
         if (index >=0) {
             notes[index] = note;
-            this.setState({notes});
+            console.log(note)
+            this.setState({notes: notes});
         }
         this.toggleModal();
     }
@@ -111,7 +113,7 @@ class Notes extends React.Component {
                             key = {note._id}
                             title = {note.title}
                             body = {note.body}
-                            _id = {note._id}
+                            id = {note._id}
                             onEdit = {(note) => this.editNoteHandler(note)}
                             onDelete = {(id) => this.deleteNote(id)}
                         />
